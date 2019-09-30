@@ -28,11 +28,37 @@
 
         <section data-markdown>
 			<textarea data-template>
+				#### What did we learn and you need to know ?
+
+				- Always run on less no of nodes . It will tell us the failures early and give better distribution of load causing less network i/o for shuffles
+				- Caching a view that is going to be used multiple time is helpful. For **smaller** table <span style="color:blue">**broadcast**</span>, for slight larger table cache.
+				- Always run UDF on smaller views. Pass only the <span style="color:blue">**needed**</span> columns and zip it back.
+                - `saveAsTable` - default implementation creates no. of partitions **multiply** no . of buckets files.
+				- Hence a force repartition is necessary to mitigate the difference in hive bucketing vs spark bucketing.
+				- `df.repartition()` followed by `saveAsTable` runs in multiple stages and causes lot of errors during execution.
+			</textarea>
+        </section>
+        <section>
+			<textarea data-template>
+				#### Use SQL API to bucket
+				```
+				CREATE TABLE IF NOT EXISTS claims
+				USING PARQUET
+				CLUSTERED BY claimuid,memberuid
+				SORTED BY claimuid,memberuid INTO 800 BUCKETS
+				LOCATION '{target_path}' AS
+				SELECT * from claims_raw DISTRIBUTE BY claimuid, memberuid
+				```
+			</textarea>
+        </section>
+        <section data-markdown>
+			<textarea data-template>
 				#### Checkpoints : Why do we need them ?
 
 				- To deal with spark <span style="color:red">**long lineage**</span> graph.
 				- Checkpoint and reload you have to start your <span style="color:red">**thinking**</span> back from how the pipeline started.
-				- Initially we started pipeline with bucketed or partitioned data and in the middle we checkpoint that <span style="color:red">**erases**</span> information and cause lot of trouble during downstream feature engineering stages.
+				- Initially we started pipeline with bucketed or partitioned data and in the middle we checkpoint that <span
+                    style="color:red">**erases**</span> information and cause lot of trouble during downstream feature engineering stages.
 			</textarea>
         </section>
 
@@ -46,7 +72,7 @@
 	    </textarea>
         </section>
 
-		<section data-markdown>
+        <section data-markdown>
 			<textarea data-template>
 				#### UDF : How do we fix it ?
 
@@ -54,19 +80,22 @@
 				- How to identify ? Read the graph or explain plan.
 				- Lets see the demo.
 	    </textarea>
-		</section>
+        </section>
 
-		<section data-markdown>
+        <section data-markdown>
 			<textarea data-template>
 				#### Windowing and Group By
 
+                - If window functions can be avoided by using group by.
+				- It should be avoided for larger views as to implement this window functions spark will reshuffle the data even if its partitioned because
+it is not aware of data until it evaluates.
 				- Its better to cache before applying such operation. <span style="color:blue">**if and only if**</span>
 				- They are complex and doing a lot of operations and aggregations.
 				- Experience, learn and apply.
 	    </textarea>
-		</section>
+        </section>
 
-		<section data-markdown>
+        <section data-markdown>
 			<textarea data-template>
 				#### My Opinion and thanks for listening.
 
@@ -74,7 +103,7 @@
 				- Big Data is not Fast Data
 				- Remember the [Amdahl's law](https://en.wikipedia.org/wiki/Amdahl%27s_law)
 	    </textarea>
-		</section>
+        </section>
     </div>
 </div>
 
