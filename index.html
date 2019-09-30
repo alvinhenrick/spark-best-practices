@@ -1,0 +1,97 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title>rSpark Best Practices</title>
+
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/reveal.css">
+    <link rel="stylesheet" href="css/theme/white.css">
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="lib/css/monokai.css">
+
+    <!-- Printing and PDF exports -->
+    <script>
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = window.location.search.match(/print-pdf/gi) ? 'css/print/pdf.css' : 'css/print/paper.css';
+        document.getElementsByTagName('head')[0].appendChild(link);
+    </script>
+</head>
+<body>
+<div class="reveal">
+    <div class="slides">
+
+        <section data-markdown>
+			<textarea data-template>
+				#### Checkpoints : Why do we need them ?
+
+				- To deal with spark <span style="color:red">**long lineage**</span> graph.
+				- Checkpoint and reload you have to start your <span style="color:red">**thinking**</span> back from how the pipeline started.
+				- Initially we started pipeline with bucketed or partitioned data and in the middle we checkpoint that <span style="color:red">**erases**</span> information and cause lot of trouble during downstream feature engineering stages.
+			</textarea>
+        </section>
+
+        <section data-markdown>
+			<textarea data-template>
+				#### UDF : The invocation is non deterministic ?
+
+				- <span style="color:blue">**Unit**</span> test will have no problem.
+				- <span style="color:blue">**Sample**</span> will have no problem.
+				- <span style="color:blue">**Terabyte** and **Billions** records</span>. Yes will have lots of problems.
+	    </textarea>
+        </section>
+
+		<section data-markdown>
+			<textarea data-template>
+				#### UDF : How do we fix it ?
+
+				- We did  <span style="color:red">**eager execution**</span> via caching or checkpoint to deal with it.
+				- How to identify ? Read the graph or explain plan.
+				- Lets see the demo.
+	    </textarea>
+		</section>
+
+		<section data-markdown>
+			<textarea data-template>
+				#### Windowing and Group By
+
+				- Its better to cache before applying such operation. <span style="color:blue">**if and only if**</span>
+				- They are complex and doing a lot of operations and aggregations.
+				- Experience, learn and apply.
+	    </textarea>
+		</section>
+
+		<section data-markdown>
+			<textarea data-template>
+				#### My Opinion and thanks for listening.
+
+				- Its not over we have just started.
+				- Big Data is not Fast Data
+				- Remember the [Amdahl's law](https://en.wikipedia.org/wiki/Amdahl%27s_law)
+	    </textarea>
+		</section>
+    </div>
+</div>
+
+<script src="js/reveal.js"></script>
+
+<script>
+    // More info about config & dependencies:
+    // - https://github.com/hakimel/reveal.js#configuration
+    // - https://github.com/hakimel/reveal.js#dependencies
+    Reveal.initialize({
+        dependencies: [
+            {src: 'plugin/markdown/marked.js'},
+            {src: 'plugin/markdown/markdown.js'},
+            {src: 'plugin/notes/notes.js', async: true},
+            {src: 'plugin/highlight/highlight.js', async: true}
+        ]
+    });
+</script>
+</body>
+</html>
