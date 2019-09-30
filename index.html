@@ -28,16 +28,23 @@
 
         <section data-markdown>
 			<textarea data-template>
-				#### What did we learn and you need to know ?
+				#### What did we learn in general and you need to know ?
 
-				- Always run on less no of nodes . It will tell us the failures early and give better distribution of load causing less network i/o for shuffles
-				- Caching a view that is going to be used multiple time is helpful. For **smaller** table <span style="color:blue">**broadcast**</span>, for slight larger table cache.
-				- Always run UDF on smaller views. Pass only the <span style="color:blue">**needed**</span> columns and zip it back.
-                - `saveAsTable` default implementation creates no. of partitions **multiply** no . of buckets files.
-				- Hence a force repartition is necessary to mitigate the difference in hive bucketing vs spark bucketing.
-				- `df.repartition()` followed by `saveAsTable` runs in multiple stages and causes lot of errors during execution.
+				- Always run on less no of nodes . It will tell us the failures early and give better distribution of load causing less network i/o for shuffles.
+				- Caching a view that is going to be used multiple time is helpful. For **smaller** table <span style="color:red">**broadcast**</span>, for slight larger table cache.
+				- Always run UDF on smaller views. Pass only the <span style="color:red">**needed**</span> columns and zip it back.
 			</textarea>
         </section>
+
+		<section data-markdown>
+			<textarea data-template>
+				#### What did we learn when bucketing and you need to know ?
+
+				- **df.saveAsTable** default implementation creates **N** partitions <span style="color:blue">**multiply**</span> **M** buckets equals **X** files.
+				- Hence a force repartition is necessary to mitigate the difference in hive bucketing vs spark bucketing.
+				- **df.repartition()** followed by **saveAsTable** runs in multiple stages and causes lot of errors during execution.
+			</textarea>
+		</section>
 
 		<section data-markdown>
 			<textarea data-template>
@@ -60,8 +67,7 @@
 
 				- To deal with spark <span style="color:red">**long lineage**</span> graph.
 				- Checkpoint and reload you have to start your <span style="color:red">**thinking**</span> back from how the pipeline started.
-				- Initially we started pipeline with bucketed or partitioned data and in the middle we checkpoint that <span
-                    style="color:red">**erases**</span> information and cause lot of trouble during downstream feature engineering stages.
+				- Initially we started pipeline with bucketed or partitioned data and in the middle we checkpoint that <span style="color:red">**erases**</span> information and cause lot of trouble during downstream feature engineering stages.
 			</textarea>
         </section>
 
@@ -72,7 +78,7 @@
 				- <span style="color:blue">**Unit**</span> test will have no problem.
 				- <span style="color:blue">**Sample**</span> will have no problem.
 				- <span style="color:blue">**Terabyte** and **Billions** records</span>. Yes will have lots of problems.
-	    </textarea>
+	    	</textarea>
         </section>
 
         <section data-markdown>
@@ -82,20 +88,19 @@
 				- We did  <span style="color:red">**eager execution**</span> via caching or checkpoint to deal with it.
 				- How to identify ? Read the graph or explain plan.
 				- Lets see the demo in the **end**.
-	    </textarea>
+	    	</textarea>
         </section>
 
         <section data-markdown>
 			<textarea data-template>
 				#### Windowing and Group By
 
-                - If window functions can be avoided by using group by.
-				- It should be avoided for larger views as to implement this window functions spark will reshuffle the data even if its partitioned because
-it is not aware of data until it evaluates.
+				- Window functions can be avoided by using group by.
+				- It should be avoided for larger views as to implement this window functions spark will reshuffle the data.
 				- Its better to cache before applying such operation. <span style="color:blue">**if and only if**</span>
 				- They are complex and doing a lot of operations and aggregations.
 				- Experience, learn and apply.
-	    </textarea>
+	    	</textarea>
         </section>
 
         <section data-markdown>
@@ -103,7 +108,7 @@ it is not aware of data until it evaluates.
 				#### My Opinion and thanks for listening.
 
 				- Its not over we have just started.
-				- Big Data is not Fast Data
+				- Big Data is not Fast Data.
 				- Remember the [Amdahl's law](https://en.wikipedia.org/wiki/Amdahl%27s_law)
 	    </textarea>
         </section>
