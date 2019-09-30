@@ -33,6 +33,7 @@
 				- Always run on less no of nodes . It will tell us the failures early and give better distribution of load causing less network i/o for shuffles.
 				- Caching a view that is going to be used multiple time is helpful. For **smaller** table <span style="color:red">**broadcast**</span>, for slight larger table <span style="color:red">**cache**</span>.
 				- Always run UDF on smaller views. Pass only the <span style="color:red">**needed**</span> columns and zip it back.
+				- WARNING : Caching large table throws <span style="color:red">**NegativeArraySizeException**</span>.
 			</textarea>
         </section>
 
@@ -84,6 +85,7 @@
 				- To deal with spark <span style="color:red">**long lineage**</span> graph.
 				- Checkpoint and reload you have to start your <span style="color:red">**thinking**</span> back from how the pipeline started.
 				- Initially we started pipeline with bucketed or partitioned data and in the middle we checkpoint that <span style="color:red">**erases**</span> information and cause lot of trouble during downstream feature engineering stages.
+				- <span style="color:red">**Now we checkpoint with bucket and reload so you don't have to worry about it.**</span>
 			</textarea>
         </section>
 
