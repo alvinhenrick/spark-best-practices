@@ -31,7 +31,7 @@
 				#### What did we learn in general and you need to know ?
 
 				- Always run on less no of nodes . It will tell us the failures early and give better distribution of load causing less network i/o for shuffles.
-				- Caching a view that is going to be used multiple time is helpful. For **smaller** table <span style="color:red">**broadcast**</span>, for slight larger table cache.
+				- Caching a view that is going to be used multiple time is helpful. For **smaller** table <span style="color:red">**broadcast**</span>, for slight larger table <span style="color:red">**cache**</span>.
 				- Always run UDF on smaller views. Pass only the <span style="color:red">**needed**</span> columns and zip it back.
 			</textarea>
         </section>
